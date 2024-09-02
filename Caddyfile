@@ -1,22 +1,24 @@
 {
-        admin off
+	admin off
 
-        log {
-                level WARN
-        }
+	log {
+		level WARN
+	}
 
-        servers {
-                trusted_proxies static 127.0.0.0/8 172.16.0.0/12 10.0.1.100/24 10.0.2.100/24
-        }
+	servers {
+		trusted_proxies static 127.0.0.0/8 172.16.0.0/12 10.0.1.100/24 10.0.2.100/24
+	}
 }
 
 :80 {
-        route / {
-                jwtauth {
-                        jwk_url https://teleport.0x08.in:3080/.well-known/jwks.json
-                        from_header Teleport-Jwt-Assertion
-                        user_claims username sub
-                }
-                reverse_proxy {$UPSTREAM}
-        }
+	route / {
+		jwtauth {
+			jwk_url https://teleport.0x08.in:3080/.well-known/jwks.json
+			from_header Teleport-Jwt-Assertion
+			user_claims username sub
+		}
+		reverse_proxy {$UPSTREAM} {
+			header_up +X-User-ID {http.auth.user.id}
+		}
+	}
 }
