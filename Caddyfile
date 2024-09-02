@@ -11,7 +11,7 @@
 }
 
 :80 {
-	route / {
+	route {
 		jwtauth {
 			jwk_url https://teleport.0x08.in:3080/.well-known/jwks.json
 			from_header Teleport-Jwt-Assertion
